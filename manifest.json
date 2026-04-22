@@ -1,0 +1,25 @@
+{
+  "manifest_version": 3,
+  "name": "Granular DevTools",
+  "version": "0.1.0",
+  "description": "Inspect Granular reactive flushes, signals, and state in your browser DevTools.",
+  "minimum_chrome_version": "102",
+  "browser_specific_settings": {
+    "gecko": { "id": "granular-devtools@granularjs", "strict_min_version": "109.0" }
+  },
+  "permissions": [],
+  "host_permissions": ["<all_urls>"],
+  "devtools_page": "devtools.html",
+  "background": { "service_worker": "background.js" },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "run_at": "document_start",
+      "all_frames": true
+    }
+  ],
+  "web_accessible_resources": [
+    { "resources": ["inject.js"], "matches": ["<all_urls>"] }
+  ]
+}
