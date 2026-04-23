@@ -1,5 +1,3 @@
-// Inject the page-context bridge. The injected script reaches into the page's
-// __GRANULAR_DEVTOOLS_HOOK__ and forwards events back to the content script.
 (function injectBridge() {
   try {
     const url = chrome.runtime.getURL('inject.js');
@@ -8,8 +6,9 @@
     s.async = false;
     s.onload = () => s.remove();
     (document.head || document.documentElement).appendChild(s);
+    console.log('[granular-devtools/content] inject.js injected');
   } catch (err) {
-    console.warn('[granular-devtools] inject failed', err);
+    console.warn('[granular-devtools/content] inject failed', err);
   }
 })();
 

@@ -13,20 +13,25 @@ information from `@granularjs/core`'s runtime profiler in a dedicated
 
 ## How it talks to your app
 
-The extension listens for the global hook `window.__GRANULAR_DEVTOOLS_HOOK__`,
-exposed by Granular `1.9+`:
+The extension listens for the global hook `window.__GRANULAR_DEVTOOLS_HOOK__`.
+Granular **does not install the hook automatically** — the app must opt in
+explicitly, ideally only in development:
 
 ```js
+// src/main.js (or main.jsx, entry-client.js, …)
 import { installDevtoolsHook } from '@granularjs/core';
 
-if (process.env.NODE_ENV !== 'production') {
-  installDevtoolsHook();
-}
+if (import.meta.env.DEV) installDevtoolsHook();          // Vite
+// or:  if (process.env.NODE_ENV !== 'production') installDevtoolsHook();
 ```
 
-`installDevtoolsHook()` enables the runtime profiler, registers a `postMessage`
-bridge, and exposes a `snapshot()` / `attach()` / `detach()` / `reset()` API
-the extension uses.
+`installDevtoolsHook()` registers a `postMessage` bridge and exposes a
+`snapshot()` / `attach()` / `detach()` / `reset()` API the extension uses.
+The runtime profiler itself only turns on when the extension calls `attach()`,
+so the hook is essentially free at runtime when no DevTools panel is open.
+
+Templates from `@granularjs/create-app` (1.x+) wire the opt-in for you. If
+your app pre-dates that, add the snippet above to your entry file.
 
 ## Install (developer mode)
 
